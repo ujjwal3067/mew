@@ -7,6 +7,10 @@
 void read_file(char* filepath);
 
 bool show_end = false;
+bool line_count = false; 
+bool empty_line = false; 
+
+
 const char *usage = "Usage: mew [OPTION]... [FILE]...\n"
 "Concatenate FILE(s) to standard output.\n"
 
@@ -34,6 +38,7 @@ const char *usage = "Usage: mew [OPTION]... [FILE]...\n"
 "Full documentation at: <https://github.com/basemac/dca>\n"
 "or available locally via: 'mew --learn't\n";
 
+
 void print_usage(){ 
     printf("%s", usage); 
 }
@@ -48,13 +53,15 @@ int main(int argc, char* argv[]){
     enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
 
     char* filename = NULL; 
-    while ((opt = getopt(argc, argv, "Ef:")) != -1) {
+    while ((opt = getopt(argc, argv, "Ebf:")) != -1) {
         switch (opt) {
             case 'E' : show_end = true; 
                        break; 
 
             case 'f':  filename = optarg; 
                        break; 
+            case 'b': line_count = true;  
+                      break;
         default:
             fprintf(stderr, "Usage: %s [-ilw] [file...]\n", argv[0]);
             exit(EXIT_FAILURE);
@@ -72,6 +79,7 @@ int main(int argc, char* argv[]){
 }
 
 void read_file(char* filepath) { 
+    int lines_count = 0; 
     char ch , file_name[25]; 
     FILE* fp ; 
     fp =  fopen(filepath, "r"); // read mode
@@ -84,13 +92,21 @@ void read_file(char* filepath) {
 
     while((ch = fgetc(fp))!= EOF)
         if (show_end)
-            if(ch == '\n')
+            if(ch == '\n') { 
                 printf("$%c",ch); 
+                lines_count += 1; 
+            }
             else 
                 printf("%c", ch); 
-        else printf("%c", ch); 
+        else { 
+            printf("%c", ch); 
+            if (ch == '\n') 
+                lines_count +=1 ; 
+        }
 
     fclose(fp); 
+    printf("\n\nstats : \n"); 
+    printf("total lines : %d", lines_count); 
 }
 
 int test(int argc, char* argv[]){
