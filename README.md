@@ -14,7 +14,7 @@ Cat ( unix tool ) implementation in pure C.
 full set of features
 note :  wip and not all feature are implemented
 ```bash
-Usage: dcat [OPTION]... [FILE]...
+Usage: mew [OPTION]... [FILE]...
 Concatenate FILE(s) to standard output.
 
 With no FILE, or when FILE is -, read standard input.
@@ -34,12 +34,12 @@ With no FILE, or when FILE is -, read standard input.
 --version  output version information and exit
 
 Examples:
-dcat f - g  Output f's contents, then standard input, then g's contents.
-dcat        Copy standard input to standard output.
+mew f - g  Output f's contents, then standard input, then g's contents.
+mew        Copy standard input to standard output.
 
 Programming by Max Base
 Full documentation at: <https://github.com/basemac/dca>
-or available locally via: 'dcat --learn't
+or available locally via: 'mew --learn't
 ```
 
 
