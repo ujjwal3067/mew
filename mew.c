@@ -1,7 +1,9 @@
+#include <stdbool.h> 
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <unistd.h> 
 
+bool show_end = false;
 const char *usage = "Usage: mew [OPTION]... [FILE]...\n"
 "Concatenate FILE(s) to standard output.\n"
 
@@ -33,10 +35,64 @@ void print_usage(){
     printf("%s", usage); 
 }
 
+void print_line() { 
+    printf("\n------------------------------------\n"); 
+}
+
 int main(int argc, char* argv[]){
+     bool isCaseInsensitive = false;
+    int opt;
+    enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
+
+    while ((opt = getopt(argc, argv, "bilw")) != -1) {
+        switch (opt) {
+            case 'b' : {
+                           printf("appending $ at end of each lines in the output");
+                           print_line(); 
+                           show_end = true; 
+                       };
+                       break; 
+
+        case 'i': isCaseInsensitive = true; break;
+        case 'l': mode = LINE_MODE; break;
+        case 'w': mode = WORD_MODE; break;
+        default:
+            fprintf(stderr, "Usage: %s [-ilw] [file...]\n", argv[0]);
+            exit(EXIT_FAILURE);
+        }
+    }
+}
+
+void read_file(char* filepath) { 
+    char ch , file_name[25]; 
+    FILE* fp ; 
+    fp =  fopen(filepath, "r"); // read mode
+    if(fp == NULL) { 
+      perror("Error while opening the file\n"); 
+      exit(EXIT_FAILURE); 
+    }
+    printf("The contents of the %s file are : \n\n\n", filepath); 
+    printf("------------------------------------\n"); 
+    while((ch = fgetc(fp))!= EOF)
+        printf("%c", ch); 
+    fclose(fp); 
+}
+
+int test(int argc, char* argv[]){
     if (argc <=1 ) { 
         printf("Error : not enough arguments\n\n");  
         print_usage(); 
+        exit(0);
     } 
 
+    /* if (argc > 2) { */ 
+    /*     /1* printf("too many arguments"); *1/ */
+    /* } */
+
+    /* char* filepath = argv[1]; */
+    /* printf("file path = %s\n", filepath); */ 
+
+    /* read_file(filepath); */ 
+
+    return 0 ; 
 }
