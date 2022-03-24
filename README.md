@@ -20,7 +20,6 @@ Concatenate FILE(s) to standard output.
 With no FILE, or when FILE is -, read standard input.
 
 -l, --learn              learn and read offline documentation
--A, --show-all           equivalent to -vET
 -b, --number-nonblank    number nonempty output lines, overrides -n
 -e                       equivalent to -vE
 -E, --show-ends          display $ at end of each line

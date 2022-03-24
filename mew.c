@@ -48,9 +48,9 @@ int main(int argc, char* argv[]){
     enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
 
     char* filename = NULL; 
-    while ((opt = getopt(argc, argv, "bf:")) != -1) {
+    while ((opt = getopt(argc, argv, "Ef:")) != -1) {
         switch (opt) {
-            case 'b' : show_end = true; 
+            case 'E' : show_end = true; 
                        break; 
 
             case 'f':  filename = optarg; 
@@ -85,7 +85,7 @@ void read_file(char* filepath) {
     while((ch = fgetc(fp))!= EOF)
         if (show_end)
             if(ch == '\n')
-                printf("$"); 
+                printf("$%c",ch); 
             else 
                 printf("%c", ch); 
         else printf("%c", ch); 

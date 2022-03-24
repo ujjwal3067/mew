@@ -1,0 +1,15 @@
+# This function is responsible for binary search 
+def binary(arr , target) : 
+    low =  0 
+    high = len(arr)
+    DEFAULT = -1
+    while low < high : 
+        mid = (low + high) // 2
+        midvalue = arr[mid]
+        if midvalue == target : 
+            return mid 
+        elif midvalue > target : 
+            low = mid + 1
+        else : 
+            high = mid - 1
+    return DEFAULT
