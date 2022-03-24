@@ -1,6 +1,7 @@
 #include <stdbool.h> 
 #include <stdio.h> 
 #include <stdlib.h> 
+#include <string.h> 
 #include <unistd.h> 
 
 
@@ -9,6 +10,7 @@ void read_file(char* filepath);
 bool show_end = false;
 bool line_count = false; 
 bool empty_line = false; 
+bool line_number = false; 
 
 
 const char *usage = "Usage: mew [OPTION]... [FILE]...\n"
@@ -53,7 +55,7 @@ int main(int argc, char* argv[]){
     enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
 
     char* filename = NULL; 
-    while ((opt = getopt(argc, argv, "Ebf:")) != -1) {
+    while ((opt = getopt(argc, argv, "Ebnf:")) != -1) {
         switch (opt) {
             case 'E' : show_end = true; 
                        break; 
@@ -62,6 +64,8 @@ int main(int argc, char* argv[]){
                        break; 
             case 'b': line_count = true;  
                       break;
+            case 'n': line_number = true; 
+                      break ; 
         default:
             fprintf(stderr, "Usage: %s [-ilw] [file...]\n", argv[0]);
             exit(EXIT_FAILURE);
@@ -78,9 +82,31 @@ int main(int argc, char* argv[]){
     }
 }
 
+void append_end_delimeter(char* line){
+    int i = 0 ;
+    char buffer[1000]; 
+    for(i = 0 ; line[i] != '\n'; i++) { 
+        buffer[i] = line[i]; 
+        // printf("%c", line[i]); 
+    }
+    buffer[++i] =  '$';
+    printf("%s\n", buffer); 
+
+    for(i  = 0 ; i < strlen(buffer); i++) { 
+        buffer[i] = ' '; 
+    }
+
+} 
+
 void read_file(char* filepath) { 
     int lines_count = 0; 
+
     char ch , file_name[25]; 
+    char* line = NULL; 
+    size_t len = 0 ; 
+    ssize_t read; 
+
+
     FILE* fp ; 
     fp =  fopen(filepath, "r"); // read mode
     if(fp == NULL) { 
@@ -90,40 +116,41 @@ void read_file(char* filepath) {
 
     print_line();
 
-    while((ch = fgetc(fp))!= EOF)
-        if (show_end)
-            if(ch == '\n') { 
-                printf("$%c",ch); 
-                lines_count += 1; 
-            }
-            else 
-                printf("%c", ch); 
-        else { 
-            printf("%c", ch); 
-            if (ch == '\n') 
-                lines_count +=1 ; 
+    /* while((ch = fgetc(fp))!= EOF){ */
+    /*     if (show_end) */
+    /*         if(ch == '\n') { */ 
+    /*             printf("$%c",ch); */ 
+    /*             lines_count += 1; */ 
+    /*         } */
+    /*         else */ 
+    /*             printf("%c", ch); */ 
+        
+    /*         printf("%c", ch); */ 
+    /*         if (ch == '\n') */ 
+    /*             lines_count +=1 ; */ 
+    /*     } */
+    /* } */ 
+
+    
+
+    char END = '$'; 
+    while((read = getline(&line, &len, fp)) != -1) { 
+
+        if (show_end) { 
+            // strncat(line ,  &END, 1 ); 
+            append_end_delimeter(line); 
         }
 
+        // printf("%s", line); 
+        lines_count += 1; 
+    }
+
+    
+
     fclose(fp); 
+    if (line)
+        free(line); 
     printf("\n\nstats : \n"); 
     printf("total lines : %d", lines_count); 
-}
-
-int test(int argc, char* argv[]){
-    if (argc <=1 ) { 
-        printf("Error : not enough arguments\n\n");  
-        print_usage(); 
-        exit(0);
-    } 
-
-    /* if (argc > 2) { */ 
-    /*     /1* printf("too many arguments"); *1/ */
-    /* } */
-
-    /* char* filepath = argv[1]; */
-    /* printf("file path = %s\n", filepath); */ 
-
-    /* read_file(filepath); */ 
-
-    return 0 ; 
+    exit(EXIT_SUCCESS); 
 }

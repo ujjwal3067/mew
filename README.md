@@ -47,4 +47,7 @@ or available locally via: 'mew --learn't
 
 ### Feature available
 - --help
+- -b 
+- -E
+
 
