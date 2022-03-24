@@ -11,6 +11,8 @@ Cat ( unix tool ) implementation in pure C.
 
 ## Help
 
+full set of features
+note :  wip and not all feature are implemented
 ```bash
 Usage: dcat [OPTION]... [FILE]...
 Concatenate FILE(s) to standard output.
@@ -39,3 +41,11 @@ Programming by Max Base
 Full documentation at: <https://github.com/basemac/dca>
 or available locally via: 'dcat --learn't
 ```
+
+
+
+
+
+### Feature available
+- --help
+
