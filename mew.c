@@ -3,6 +3,9 @@
 #include <stdlib.h> 
 #include <unistd.h> 
 
+
+void read_file(char* filepath);
+
 bool show_end = false;
 const char *usage = "Usage: mew [OPTION]... [FILE]...\n"
 "Concatenate FILE(s) to standard output.\n"
@@ -36,7 +39,7 @@ void print_usage(){
 }
 
 void print_line() { 
-    printf("\n------------------------------------\n"); 
+    printf("\n------------------------------------\n\n\n"); 
 }
 
 int main(int argc, char* argv[]){
@@ -44,22 +47,27 @@ int main(int argc, char* argv[]){
     int opt;
     enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
 
-    while ((opt = getopt(argc, argv, "bilw")) != -1) {
+    char* filename = NULL; 
+    while ((opt = getopt(argc, argv, "bf:")) != -1) {
         switch (opt) {
-            case 'b' : {
-                           printf("appending $ at end of each lines in the output");
-                           print_line(); 
-                           show_end = true; 
-                       };
+            case 'b' : show_end = true; 
                        break; 
 
-        case 'i': isCaseInsensitive = true; break;
-        case 'l': mode = LINE_MODE; break;
-        case 'w': mode = WORD_MODE; break;
+            case 'f':  filename = optarg; 
+                       break; 
         default:
             fprintf(stderr, "Usage: %s [-ilw] [file...]\n", argv[0]);
             exit(EXIT_FAILURE);
         }
+    }
+
+    // processing  file
+    if(filename != NULL) { 
+        read_file(filename);
+        return 0 ; 
+    } else { 
+        printf("\nError: file path not provided\n"); 
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -71,10 +79,17 @@ void read_file(char* filepath) {
       perror("Error while opening the file\n"); 
       exit(EXIT_FAILURE); 
     }
-    printf("The contents of the %s file are : \n\n\n", filepath); 
-    printf("------------------------------------\n"); 
+
+    print_line();
+
     while((ch = fgetc(fp))!= EOF)
-        printf("%c", ch); 
+        if (show_end)
+            if(ch == '\n')
+                printf("$"); 
+            else 
+                printf("%c", ch); 
+        else printf("%c", ch); 
+
     fclose(fp); 
 }
 
