@@ -13,6 +13,7 @@ bool empty_line = false;
 bool line_number = false; 
 bool indentation = false; 
 bool show_tabs = false; 
+bool remove_empty = false; 
 
 
 const char *usage = "\n\nUsage: mew [OPTION]... [FILE]...\n"
@@ -24,6 +25,7 @@ const char *usage = "\n\nUsage: mew [OPTION]... [FILE]...\n"
 "-n, --number             number all output lines\n"
 "-T, --show-tabs          display TAB characters as ^I\n"
 "-i,                      display this help and exit\n"
+"-r,                      remove empty lines\n"
 "-h     display this help and exit\n";
 
 
@@ -41,7 +43,7 @@ int main(int argc, char* argv[]){
     enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
 
     char* filename = NULL; 
-    while ((opt = getopt(argc, argv, "TihEbnf:")) != -1) {
+    while ((opt = getopt(argc, argv, "rTihEbnf:")) != -1) {
         switch (opt) {
             case 'E' : show_end = true; 
                        break; 
@@ -56,6 +58,8 @@ int main(int argc, char* argv[]){
                       break; 
             case 'T': show_tabs = true; 
                       break; 
+            case 'r': remove_empty = true; 
+                      break ; 
             case 'h': 
                       print_usage();
                       exit(EXIT_SUCCESS); 
@@ -114,13 +118,13 @@ void show_indentation(char  *line) {
 }  
 
 
-void show_tabs(char * line) { 
+void display_tabchar(char * line) { 
     int i = 0; 
     char buffer[1000]; 
     int bit = 0 ; 
     for(i = 0 ; line[i] != '\n'; i++) { 
         if(bit == 0 && (line[i] == '\t')){ 
-            buffer[i] = '_'; 
+            buffer[i] = '-'; 
             continue ; 
         }else { 
             bit = 1 ; 
@@ -144,6 +148,15 @@ void  create_large_line(char * line){
 }
 
 
+bool line_is_empty(char * line ) { 
+    int i = 0 ; 
+    int bit = 0 ; 
+    int len = strlen(line); 
+    if (len == 1 )  { 
+        return true; 
+    }
+    return false; 
+} 
 
 void read_file(char* filepath) { 
     int lines_count = 0; 
@@ -182,6 +195,13 @@ void read_file(char* filepath) {
     char END = '$'; 
     while((read = getline(&line, &len, fp)) != -1) { 
         lines_count += 1; 
+
+
+        // don't process the empty line for all flags
+        if(remove_empty && line_is_empty(line)){  
+            continue ; 
+        }
+
         if (show_end) {  
             append_end_delimeter(line); 
         }
@@ -190,6 +210,8 @@ void read_file(char* filepath) {
         }
         else if (indentation) { 
             show_indentation(line);
+        }else if (show_tabs) { 
+            display_tabchar(line); 
         }
         else { 
             printf("%s", line); 

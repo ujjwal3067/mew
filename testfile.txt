@@ -4,6 +4,9 @@ def binary(arr , target) :
     high = len(arr)
     DEFAULT = -1
     while low < high : 
+
+
+
         mid = (low + high) // 2
         midvalue = arr[mid]
         if midvalue == target : 
@@ -13,3 +16,11 @@ def binary(arr , target) :
         else : 
             high = mid - 1
     return DEFAULT
+
+
+# tab test
+
+def binary(arr, target): 
+        (2 tabs)
+            (3 tabs)
+                (4 tabs)
