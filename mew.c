@@ -12,13 +12,13 @@ bool line_count = false;
 bool empty_line = false; 
 bool line_number = false; 
 bool indentation = false; 
+bool show_tabs = false; 
 
 
-const char *usage = "Usage: mew [OPTION]... [FILE]...\n"
+const char *usage = "\n\nUsage: mew [OPTION]... [FILE]...\n"
 "Concatenate FILE(s) to standard output.\n"
 
-"With no FILE, or when FILE is -, read standard input.\n"
-
+"-f,                      file path\n"
 "-b, --number-nonblank    number nonempty output lines, overrides -n\n"
 "-E, --show-ends          display $ at end of each line\n"
 "-n, --number             number all output lines\n"
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
     enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
 
     char* filename = NULL; 
-    while ((opt = getopt(argc, argv, "ihEbnf:")) != -1) {
+    while ((opt = getopt(argc, argv, "TihEbnf:")) != -1) {
         switch (opt) {
             case 'E' : show_end = true; 
                        break; 
@@ -53,6 +53,8 @@ int main(int argc, char* argv[]){
             case 'n': line_number = true; 
                       break ; 
             case 'i' : indentation = true;
+                      break; 
+            case 'T': show_tabs = true; 
                       break; 
             case 'h': 
                       print_usage();
@@ -110,6 +112,29 @@ void show_indentation(char  *line) {
         buffer[i] = ' '; 
     }
 }  
+
+
+void show_tabs(char * line) { 
+    int i = 0; 
+    char buffer[1000]; 
+    int bit = 0 ; 
+    for(i = 0 ; line[i] != '\n'; i++) { 
+        if(bit == 0 && (line[i] == '\t')){ 
+            buffer[i] = '_'; 
+            continue ; 
+        }else { 
+            bit = 1 ; 
+            buffer[i] = line[i]; 
+            continue ; 
+        }
+    }
+
+    printf("%s\n", buffer); 
+    // clean the buffer
+    for(i  = 0 ; i < strlen(buffer); i++) { 
+        buffer[i] = ' '; 
+    } 
+}
 
 void  create_large_line(char * line){ 
     char buffer[1000] ; 
