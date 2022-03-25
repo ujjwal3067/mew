@@ -196,7 +196,6 @@ void read_file(char* filepath) {
     while((read = getline(&line, &len, fp)) != -1) { 
         lines_count += 1; 
 
-
         // don't process the empty line for all flags
         if(remove_empty && line_is_empty(line)){  
             continue ; 

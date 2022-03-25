@@ -4,11 +4,6 @@ Cat ( unix tool ) implementation in pure C.
 
 
 
-
-
-
-
-
 ## Help
 
 full set of features
@@ -32,6 +27,7 @@ Concatenate FILE(s) to standard output.
 
 
 ### Feature available
+
 - -h  ( usage)
 - -b  ( total all line counts )
 - -E  ( append $ at end)
@@ -39,11 +35,7 @@ Concatenate FILE(s) to standard output.
 - -f  ( file path )
 - -i  ( show indentation )
 
-
-
 #### Todo
 - Refactoring
 - FIXME
     - only single command working at the moment 
-
-
