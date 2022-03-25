@@ -25,6 +25,7 @@ With no FILE, or when FILE is -, read standard input.
 -T, --show-tabs          display TAB characters as ^I
 -i,                      show indentation markers
 --h                      display this help and exit
+
 ```
 
 
