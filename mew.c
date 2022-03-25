@@ -11,6 +11,7 @@ bool show_end = false;
 bool line_count = false; 
 bool empty_line = false; 
 bool line_number = false; 
+bool indentation = false; 
 
 
 const char *usage = "Usage: mew [OPTION]... [FILE]...\n"
@@ -55,17 +56,19 @@ int main(int argc, char* argv[]){
     enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
 
     char* filename = NULL; 
-    while ((opt = getopt(argc, argv, "hEbnf:")) != -1) {
+    while ((opt = getopt(argc, argv, "ihEbnf:")) != -1) {
         switch (opt) {
             case 'E' : show_end = true; 
                        break; 
 
-            case 'f':  filename = optarg; 
-                       break; 
+            case 'f': filename = optarg; 
+                      break; 
             case 'b': line_count = true;  
                       break;
             case 'n': line_number = true; 
                       break ; 
+            case 'i' : indentation = true;
+                      break; 
             case 'h': 
                       print_usage();
                       exit(EXIT_SUCCESS); 
@@ -89,6 +92,7 @@ void append_end_delimeter(char* line){
     int i = 0 ;
     char buffer[1000]; 
     for(i = 0 ; line[i] != '\n'; i++) { 
+        
         buffer[i] = line[i]; 
         // printf("%c", line[i]); 
     }
@@ -99,8 +103,28 @@ void append_end_delimeter(char* line){
     for(i  = 0 ; i < strlen(buffer); i++) { 
         buffer[i] = ' '; 
     }
-
 } 
+
+void show_indentation(char  *line) { 
+    int i = 0 ; 
+    char buffer[1000]; 
+    int bit =  0 ; 
+    for(i = 0 ; line[i] != '\n'; i++){ 
+        if(bit == 0 && (line[i] == ' ' || line[i] == '\t')) { 
+            buffer[i] = '-';
+            continue ; 
+        }else { 
+            bit = 1; 
+            buffer[i] = line[i]; 
+            continue ; 
+        }
+    }
+    printf("%s\n", buffer); 
+    // clean the buffer
+    for(i = 0 ; i < strlen(buffer) ; i++) { 
+        buffer[i] = ' '; 
+    }
+}  
 
 void  create_large_line(char * line){ 
     char buffer[1000] ; 
@@ -153,7 +177,10 @@ void read_file(char* filepath) {
         }
         else if (line_number) {
             printf("%d %s", lines_count, line); 
-            }
+        }
+        else if (indentation) { 
+            show_indentation(line);
+        }
         else { 
             printf("%s", line); 
         }

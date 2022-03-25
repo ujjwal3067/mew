@@ -23,6 +23,7 @@ With no FILE, or when FILE is -, read standard input.
 -E, --show-ends          display $ at end of each line
 -n, --number             number all output lines
 -T, --show-tabs          display TAB characters as ^I
+-i,                      show indentation markers
 --h                      display this help and exit
 ```
 
