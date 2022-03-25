@@ -22,21 +22,8 @@ With no FILE, or when FILE is -, read standard input.
 -b, --number-nonblank    number nonempty output lines, overrides -n
 -E, --show-ends          display $ at end of each line
 -n, --number             number all output lines
--s, --squeeze-blank      suppress repeated empty output lines
--t                       equivalent to -vT
 -T, --show-tabs          display TAB characters as ^I
--u                      (ignored)
--v, --show-nonprinting   use ^ and M- notation, except for LFD and TAB
---help     display this help and exit
---version  output version information and exit
-
-Examples:
-mew f - g  Output f's contents, then standard input, then g's contents.
-mew        Copy standard input to standard output.
-
-Programming by Max Base
-Full documentation at: <https://github.com/basemac/dca>
-or available locally via: 'mew --learn't
+--h                      display this help and exit
 ```
 
 
