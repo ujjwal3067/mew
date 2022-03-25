@@ -39,3 +39,5 @@ Concatenate FILE(s) to standard output.
 - Refactoring
 - FIXME
     - only single command working at the moment 
+
+<img align="center" alt="GIF" src="https://raw.githubusercontent.com/haoruilee/haoruilee/master/pic/pusheencode.gif" />
