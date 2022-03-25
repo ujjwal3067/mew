@@ -55,7 +55,7 @@ int main(int argc, char* argv[]){
     enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode = CHARACTER_MODE;
 
     char* filename = NULL; 
-    while ((opt = getopt(argc, argv, "Ebnf:")) != -1) {
+    while ((opt = getopt(argc, argv, "hEbnf:")) != -1) {
         switch (opt) {
             case 'E' : show_end = true; 
                        break; 
@@ -66,6 +66,9 @@ int main(int argc, char* argv[]){
                       break;
             case 'n': line_number = true; 
                       break ; 
+            case 'h': 
+                      print_usage();
+                      exit(EXIT_SUCCESS); 
         default:
             fprintf(stderr, "Usage: %s [-ilw] [file...]\n", argv[0]);
             exit(EXIT_FAILURE);
@@ -92,11 +95,21 @@ void append_end_delimeter(char* line){
     buffer[++i] =  '$';
     printf("%s\n", buffer); 
 
+    // clear the buffer
     for(i  = 0 ; i < strlen(buffer); i++) { 
         buffer[i] = ' '; 
     }
 
 } 
+
+void  create_large_line(char * line){ 
+    char buffer[1000] ; 
+    for(int i = 0 ; i < strlen(line) ; i++) { 
+        buffer[i] = line[i]; 
+    }
+}
+
+
 
 void read_file(char* filepath) { 
     int lines_count = 0; 
@@ -130,27 +143,30 @@ void read_file(char* filepath) {
     /*             lines_count +=1 ; */ 
     /*     } */
     /* } */ 
-
     
 
     char END = '$'; 
     while((read = getline(&line, &len, fp)) != -1) { 
-
-        if (show_end) { 
-            // strncat(line ,  &END, 1 ); 
+        lines_count += 1; 
+        if (show_end) {  
             append_end_delimeter(line); 
         }
-
-        // printf("%s", line); 
-        lines_count += 1; 
+        else if (line_number) {
+            printf("%d %s", lines_count, line); 
+            }
+        else { 
+            printf("%s", line); 
+        }
     }
 
-    
 
     fclose(fp); 
     if (line)
         free(line); 
-    printf("\n\nstats : \n"); 
-    printf("total lines : %d", lines_count); 
+
+    if (line_count)  { 
+        printf("\n\nstats : \n"); 
+        printf("total lines : %d", lines_count); 
+    }
     exit(EXIT_SUCCESS); 
 }

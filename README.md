@@ -19,9 +19,7 @@ Concatenate FILE(s) to standard output.
 
 With no FILE, or when FILE is -, read standard input.
 
--l, --learn              learn and read offline documentation
 -b, --number-nonblank    number nonempty output lines, overrides -n
--e                       equivalent to -vE
 -E, --show-ends          display $ at end of each line
 -n, --number             number all output lines
 -s, --squeeze-blank      suppress repeated empty output lines
@@ -46,8 +44,12 @@ or available locally via: 'mew --learn't
 
 
 ### Feature available
-- --help
-- -b 
-- -E
+- -h  ( usage)
+- -b  ( total all line counts )
+- -E  ( append $ at end)
+- -n  ( line number )
 
 
+
+#### Todo
+- Refactoring
